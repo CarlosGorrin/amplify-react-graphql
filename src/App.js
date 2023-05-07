@@ -78,8 +78,8 @@ const App = ({ signOut }) => {
 
   return (
     <View className="App">
-      <Heading level={1}>My Notes App</Heading>
-      <View as="form" margin="3rem 0" onSubmit={createNote}>
+      <h1 className="text-6xl mb-5 text-sky-700 pt-6">My Notes App</h1>
+      <View as="form" className="container mx-auto bg-gray-100 rounded-xl shadow border p-8 m-10" onSubmit={createNote}>
         <Flex direction="row" justifyContent="center">
           <TextField
             name="name"
@@ -97,7 +97,7 @@ const App = ({ signOut }) => {
             variation="quiet"
             required
           />
-          <View
+          <View className="text-sm"
             name="image"
             as="input"
             type="file"
@@ -110,7 +110,7 @@ const App = ({ signOut }) => {
       </View>
       
       <Heading level={2}>Current Notes</Heading>
-      <View margin="3rem 0">
+      <View margin="3rem 0" className="">
       {notes.map((note) => (
         <Flex
           key={note.id || note.name}
