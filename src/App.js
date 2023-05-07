@@ -72,6 +72,10 @@ const App = ({ signOut }) => {
     });
   }
 
+  const capitalizeFirst = str => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   return (
     <View className="App">
       <Heading level={1}>My Notes App</Heading>
@@ -116,7 +120,7 @@ const App = ({ signOut }) => {
           margin="1rem 0"
         >
           <Text as="strong" fontWeight={700}>
-            {note.name}
+          {capitalizeFirst(note.name)}
           </Text>
           <Text as="span">{note.description}</Text>
           {note.image && (
