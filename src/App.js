@@ -113,6 +113,7 @@ const App = ({ signOut }) => {
           direction="row"
           justifyContent="center"
           alignItems="center"
+          margin="1rem 0"
         >
           <Text as="strong" fontWeight={700}>
             {note.name}
