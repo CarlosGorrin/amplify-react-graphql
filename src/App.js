@@ -109,32 +109,36 @@ const App = ({ signOut }) => {
         </Flex>
       </View>
       
-      <Heading level={2}>Current Notes</Heading>
-      <View margin="3rem 0" className="">
-      {notes.map((note) => (
-        <Flex
-          key={note.id || note.name}
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          margin="1rem 0"
-        >
-          <Text as="strong" fontWeight={700}>
-          {capitalizeFirst(note.name)}
-          </Text>
-          <Text as="span">{note.description}</Text>
-          {note.image && (
-            <Image
-              src={note.image}
-              alt={`visual aid for ${notes.name}`}
-              style={{ width: 400 }}
-            />
-          )}
-          <Button variation="link" onClick={() => deleteNote(note)}>
-            Delete note
-          </Button>
-        </Flex>
-      ))}
+      <Heading level={2} className="text-2xl font-bold mb-4">Current Notes</Heading>
+      <View margin="3rem 1rem" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {notes.map((note) => (
+          <Flex
+            key={note.id || note.name}
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            className="bg-white p-4 rounded-md shadow-md"
+          >
+            {note.image && (
+               <Image className="relative w-full h-0 overflow-hidden aspect-ratio-square mb-4"
+               src={note.image}
+               alt={`visual aid for ${notes.name}`}
+               style={{ maxWidth: '350px', height: 'auto' }}
+             />
+            )}
+            <Text as="strong" fontWeight={700} className="text-xl mb-2">
+              {capitalizeFirst(note.name)}
+            </Text>
+            <Text as="span" className="text-gray-500 text-sm mb-4">{note.description}</Text>
+            <Button
+              variation="link"
+              onClick={() => deleteNote(note)}
+              className="text-red-500 hover:text-red-600 text-sm"
+            >
+              Delete note
+            </Button>
+          </Flex>
+        ))}
       </View>
       <Button margin="3rem 0" onClick={signOut}>Sign Out</Button>
     </View>
