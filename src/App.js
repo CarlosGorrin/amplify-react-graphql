@@ -22,9 +22,9 @@ import {
 
 Amplify.configure(awsconfig);
 
-const App = ({ signOut, selectedFile = null }) => {
+const App = ({ signOut, props }) => {
   const [notes, setNotes] = useState([]);
-  const [selectedFileName, setSelectedFileName] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     fetchNotes();
@@ -52,17 +52,16 @@ const App = ({ signOut, selectedFile = null }) => {
     const data = {
       name: form.get("name"),
       description: form.get("description"),
-      image: selectedFile ? selectedFile.name : null,
+      image: image.name,
     };
-      if (selectedFile) {
-        await Storage.put(data.name, selectedFile);
-      }
+    if (!!data.image) await Storage.put(data.name, image);
     await API.graphql({
       query: createNoteMutation,
       variables: { input: data },
     });
     fetchNotes();
     event.target.reset();
+    setSelectedFile(null);
   }
 
   async function deleteNote({ id, name }) {
@@ -75,19 +74,19 @@ const App = ({ signOut, selectedFile = null }) => {
     });
   }
 
-  const capitalizeFirst = (str) => {
+  const capitalizeFirst = str => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
   const hiddenFileInput = React.useRef(null);
 
-  const handleClick = (event) => {
+  const handleClick = event => {
     hiddenFileInput.current.click();
   };
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     const fileUploaded = event.target.files[0];
-    setSelectedFileName(fileUploaded.name);
+    setSelectedFile(fileUploaded);
   };
 
   return (
@@ -114,6 +113,11 @@ const App = ({ signOut, selectedFile = null }) => {
           <Button onClick={handleClick}>
             Upload a file
           </Button>
+          {selectedFile && (
+            <Text className="text-sm">
+              {selectedFile.name}
+            </Text>
+          )}
           <View className="text-sm"
             name="image"
             as="input"
@@ -122,16 +126,12 @@ const App = ({ signOut, selectedFile = null }) => {
             onChange={handleChange}
             style={{ alignSelf: "end", display:'none' }}
           />
-          {selectedFile && (
-            <Text as="span" className="text-gray-500 text-sm mb-4">
-              {selectedFile && <p>{selectedFile.name}</p>}
-            </Text>
-          )}
           <Button type="submit" variation="primary">
             Create Note
           </Button>
         </Flex>
-      </View>
+    </View>
+
     <Heading level={2} className="text-2xl font-bold mb-4">Current Notes</Heading>
     <View margin="3rem 1rem" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {notes.map((note) => (
@@ -150,15 +150,13 @@ const App = ({ signOut, selectedFile = null }) => {
     style={{ maxWidth: '350px', height: 'auto' }}
   />
     )}
-    <Text as="strong" fontWeight={700} className="text-xl mb-2">
+    <h4 className="text-2xl text-green-800 font-mono">
     {capitalizeFirst(note.name)}
-    </Text>
+    </h4>
     <Text as="span" className="text-gray-500 text-sm mb-4">{note.description}</Text>
     <Button
     variation="link"
-    onClick={() => deleteNote(note)}
-    className="text-red-500 hover:text-red-600 text-sm"
-    >
+    onClick={() => deleteNote(note)}>
     Delete note
     </Button>
     </Flex>
